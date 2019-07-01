@@ -12,6 +12,8 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 
+const Log = require('./custom_modules/consoleLog.js');
+
 const client = new Discord.Client();
 
 client.commands = new Discord.Collection();
@@ -31,6 +33,7 @@ client.once('ready', () => {
 client.on('message', msg => {
     if (msg.channel.type === 'text' && msg.channel.name === 'geico-log' && !msg.author.bot) {
         msg.delete().catch(console.error);
+        Log.misc(`${msg.author.tag}'s message removed from #geico-log at ${msg.createdAt}`);
     }
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
@@ -51,6 +54,7 @@ client.on('message', msg => {
     const command = client.commands.get(commandName);
 
     if (command.guildOnly && msg.channel.type != 'text') {
+        Log.misc(`${msg.author.tag}'s command wasn't executed because it was in dm's (${msg.createdAt})`);
         return msg.channel.send(`:x: I can't execute that command here!`);
     }
 
@@ -61,6 +65,7 @@ client.on('message', msg => {
             reply += `\n:point_right: The correct usage would be: \`${prefix}${commandName} ${command.usage}\` :point_left:`;
         }
 
+        Log.error(msg, commandName);
         return msg.channel.send(reply);
     } else if (command.args && args.length > command.argsNum) {
         let reply = `:x: You provided too many arguments, ${msg.author}! :x:`;
@@ -69,6 +74,7 @@ client.on('message', msg => {
             reply += `\n:point_right: The correct usage would be: \`${prefix}${commandName} ${command.usage}\` :point_left:`;
         }
 
+        Log.error(msg, commandName);
         return msg.channel.send(reply);
     }
 
@@ -77,7 +83,7 @@ client.on('message', msg => {
         if (!channels.find(channels => channels.name === 'geico-log')) {
             if (!msg.guild.available) 
                 return msg.guild.owner.send("Hello! \nSomeone in your guild used a command which requires the `geico-log` channel, which doesn't exists yet.\nI would have created it for you, but the guild is not available right now :shrug:");
-            
+
                 msg.guild.createChannel('geico-log', {
                     type: 'text',
                     permissionOverwrites: [{
@@ -85,6 +91,8 @@ client.on('message', msg => {
                         deny: ['SEND_MESSAGES', 'MANAGE_MESSAGES']
                     }]
                 }).catch(console.error);
+
+                Log.misc(`#geico-log channel created in guild ${msg.guild.id}`);
         }
     }
 
@@ -101,6 +109,7 @@ client.on('message', msg => {
         
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
+            Log.misc(`${msg.author.tag} reached cooldown for ${commandName} command at ${msg.createdAt}`);
             return msg.channel.send(`:stopwatch: You're doing that too quickly ${msg.author.tag}!\nYou have to wait another ${timeLeft} second(s) before you can do that again!`);
         }
     }
@@ -108,6 +117,7 @@ client.on('message', msg => {
 	try {
 		command.execute(msg, args);
 	} catch (error) {
+        Log.error(msg, commandName)
 		console.error(error);
 		msg.reply('there was an error trying to execute that command! :interrobang:');
 	}
