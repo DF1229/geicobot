@@ -1,4 +1,5 @@
 const { prefix } = require('../config.json');
+const Log = require('../custom_modules/consoleLog.js');
 
 module.exports = {
     name: 'help',
@@ -41,6 +42,8 @@ module.exports = {
 
         data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 
-        msg.channel.send(data, { split: true });
+        msg.channel.send(data, { split: true }).then().catch(err => {
+            console.error(err);
+        });
     },
 };

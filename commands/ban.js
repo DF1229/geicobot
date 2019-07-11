@@ -1,4 +1,5 @@
 const auditLogger = require('../custom_modules/auditLogEmbed.js');
+const Log = require('../custom_modules/consoleLog.js');
 
 module.exports = {
     name: 'ban',
@@ -19,11 +20,13 @@ module.exports = {
 
         msg.mentions.members.first().ban({ reason: `Issued by ${msg.author.tag}` }).then(() => {
             auditLogger.execute(msg, 'ban');
+            Log.action(msg, this.name);
             return msg.channel.send(`:white_check_mark: User ${msg.mentions.members.first()} banned! :wave:`);
         }).catch(err => {
             if (err.name === 'DiscordAPIError' && err.message === 'Missing Permissions') {
                 msg.channel.send(`:x: I can't ban that user! This usually means they're an admin on this server ${msg.author} :face_palm:`);
             }
+            Log.misc(`${msg.author} failed banning ${msg.mentions.members.first()}`);
         });
     }
 };
