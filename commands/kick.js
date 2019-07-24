@@ -3,7 +3,7 @@ const auditLogger = require('../custom_modules/auditLogEmbed.js');
 module.exports = {
     name: 'kick',
     description: 'Kicks a user from the server',
-    usage: '<user>',
+    usage: '(user)',
     args: true,
     argsNum: 1,
     auditLog: true,

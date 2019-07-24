@@ -4,7 +4,7 @@ const Log = require('../custom_modules/consoleLog.js');
 module.exports = {
     name: 'ban',
     description: 'Bans a user from the server',
-    usage: '<user>',
+    usage: '(user)',
     args: true,
     argsNum: 1,
     auditLog: true,
@@ -12,6 +12,7 @@ module.exports = {
     adminOnly: false,
     execute(msg) {
         if (!msg.member.hasPermission('BAN_MEMBERS')) {
+            Log.misc(`${msg.author} failed banning ${msg.mentions.members.first()}`);
             return msg.channel.send(`:no_entry: You don't have the required permission(s) to use this command ${msg.author}`);
         }
 
