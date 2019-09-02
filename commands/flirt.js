@@ -24,7 +24,7 @@ module.exports = {
             const newID = icebreakers.icebreakers.length;
 
             var newIcebreaker = "";
-            args.array.forEach(element => {
+            args.forEach(element => {
                 newIcebreaker += element;
             });
 
