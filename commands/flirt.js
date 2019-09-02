@@ -25,7 +25,7 @@ module.exports = {
 
             var newIcebreaker = "";
             args.forEach(element => {
-                newIcebreaker += element;
+                newIcebreaker += (element + " ");
             });
 
             icebreakers.icebreakers.push({
