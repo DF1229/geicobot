@@ -23,9 +23,14 @@ module.exports = {
             const icebreakers = JSON.parse(rawData);
             const newID = icebreakers.icebreakers.length;
 
+            var newIcebreaker = "";
+            args.array.forEach(element => {
+                newIcebreaker += element;
+            });
+
             icebreakers.icebreakers.push({
                 "id": newID,
-                "icebreaker": args[0],
+                "icebreaker": newIcebreaker,
                 "addedBy": msg.author.tag
             });
 
