@@ -4,7 +4,6 @@ module.exports = {
     name: 'newflirt',
     description: '<o/',
     args: true,
-    argsNum: 1,
     usage: '<your icebreaker>',
     auditLog: false,
     guildOnly: false,
