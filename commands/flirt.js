@@ -26,7 +26,7 @@ module.exports = {
 
             if (!selectedIcebreaker) 
                 return msg.channel.send(`:x: Something went wrong getting an item from the array, please try again later ${msg.author}! :face_palm:`);
-            if (typeof selectedIcebreaker != 'string') 
+            if (typeof icebreaker != 'string') 
                 return msg.channel.send(`:x: Something went wrong, the selected item wasn't a \`String\` object, ${msg.author}! :face_palm:`);
             
             var embed = new Discord.RichEmbed()
