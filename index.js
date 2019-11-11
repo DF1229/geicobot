@@ -2,8 +2,8 @@
  *  Language: JavaScript (running with Node.JS)
  *  Library: Discord.js (https://discord.js.org)
  *  
- *  Version: 0.0.2
- *  Author: Daan Faber (Discord: DF1229#6788)
+ *  Version: 0.0.3
+ *  Author: Daan Faber (Discord: DF1229#1337)
  *  Date: 26/06/2019
  *  Liscence: ISC
  */
@@ -28,6 +28,8 @@ for (const file of commandFiles) {
 client.once('ready', () => {
     console.clear();
     console.log(`-={ ${client.user.tag} logged in and ready with command prefix "${prefix}" }=-`);
+    client.user.setActivity("with my feelings", {type: "PLAYING"})
+        .catch(console.error);
 });
 
 client.on('message', msg => {
@@ -52,6 +54,10 @@ client.on('message', msg => {
     */
    
     const command = client.commands.get(commandName);
+
+    if (command.works == 'no') {
+        return msg.channel.send(`:x: That command isn't available right now!`);
+    }
 
     if (command.guildOnly && msg.channel.type != 'text') {
         Log.misc(`${msg.author.tag}'s command wasn't executed because it was in dm's (${msg.createdAt})`);
@@ -78,7 +84,7 @@ client.on('message', msg => {
         return msg.channel.send(reply);
     }
 
-    if (command.auditLog) {
+    /*if (command.auditLog) {
         let channels = msg.guild.channels;
         if (!channels.find(channels => channels.name === 'geico-log')) {
             if (!msg.guild.available) 
@@ -94,7 +100,7 @@ client.on('message', msg => {
 
                 Log.misc(`#geico-log channel created in guild ${msg.guild.id}`);
         }
-    }
+    }*/
 
     if (!cooldowns.has(command.name)) {
         cooldowns.set(command.name, new Discord.Collection());

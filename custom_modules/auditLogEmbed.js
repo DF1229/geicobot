@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     modLog(msg, commandName) {
-        let color;
+        /*let color;
         if (commandName === 'ban')
             color = '#FF8B32';
         else if (commandName === 'kick')
@@ -19,10 +19,10 @@ module.exports = {
 
         const channels = msg.guild.channels;
         const geicoLog = channels.find(channels => channels.name === 'geico-log');
-        return geicoLog.send(embed);
+        return geicoLog.send(embed);*/
     },
     generalLog(msg, type, details) {
-        let descEmoji, actionDesc;
+        /*let descEmoji, actionDesc;
         switch (type) {
             case 'bulkDelete':
                 actionDesc = 'Bulk message clearing';
@@ -44,6 +44,6 @@ module.exports = {
 
         const channels = msg.guild.channels;
         const geicoLog = channels.find(channels => channels.name === 'geico-log');
-        return geicoLog.send(embed);
+        return geicoLog.send(embed);*/
     }
 }

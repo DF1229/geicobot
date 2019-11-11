@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 module.exports = {
+    works: 'no',
     name: 'newflirt',
     description: '<o/',
     args: true,
