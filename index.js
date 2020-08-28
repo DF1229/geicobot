@@ -100,10 +100,11 @@ client.on('message', msg => {
     }
 
 	try {
-		command.execute(msg, args);
+        command.execute(msg, args);
 	} catch (error) {
 		console.error(error);
-		msg.reply(' there was an error trying to execute that command! :interrobang:');
+        msg.reply(' there was an error trying to execute that command! :interrobang:');
+        Logger.add(msg.author.id, `Error occurred when trying to execute command.\nError log: ${error}\n`);
 	}
 });
 
