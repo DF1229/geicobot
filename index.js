@@ -2,9 +2,9 @@
  *  Language: JavaScript (running with Node.JS)
  *  Library: Discord.js (https://discord.js.org)
  *  
- *  Version: 0.0.3
+ *  Version: 0.1.0
  *  Author: Daan Faber (Discord: DF1229#1337)
- *  Date: 26/06/2019
+ *  Date: 28/08/2020
  *  Liscence: ISC
  */
 
@@ -12,7 +12,8 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 
-const Log = require('./custom_modules/consoleLog.js');
+const Logger = require('./custom_modules/logger.js');
+const { config } = require('process');
 
 const client = new Discord.Client();
 
@@ -35,7 +36,7 @@ client.once('ready', () => {
 client.on('message', msg => {
     if (msg.channel.type === 'text' && msg.channel.name === 'geico-log' && !msg.author.bot) {
         msg.delete().catch(console.error);
-        Log.misc(`${msg.author.tag}'s message removed from #geico-log at ${msg.createdAt}`);
+        Logger.add(`${msg.author.tag}'s message removed from #geico-log at ${msg.createdAt}`);
     }
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
@@ -55,12 +56,12 @@ client.on('message', msg => {
    
     const command = client.commands.get(commandName);
 
-    if (command.works == 'no') {
-        return msg.channel.send(`:x: That command isn't available right now!`);
+    if (command.adminOnly) {
+        if (msg.user.id != config.adminIDs[0]) return msg.channel.send(`:x: Sorry, that command can currently only be used by the developer!`);
     }
 
     if (command.guildOnly && msg.channel.type != 'text') {
-        Log.misc(`${msg.author.tag}'s command wasn't executed because it was in dm's (${msg.createdAt})`);
+        Logger.add(msg.author.tag, `command wasn't executed because it was in dm's (${msg.createdAt})`);
         return msg.channel.send(`:x: I can't execute that command here!`);
     }
 
@@ -71,7 +72,6 @@ client.on('message', msg => {
             reply += `\n:point_right: The correct usage would be: \`${prefix}${commandName} ${command.usage}\` :point_left:`;
         }
 
-        Log.error(msg, commandName);
         return msg.channel.send(reply);
     } else if (command.args && args.length > command.argsNum) {
         let reply = `:x: You provided too many arguments, ${msg.author}! :x:`;
@@ -79,28 +79,8 @@ client.on('message', msg => {
         if (command.usage) {
             reply += `\n:point_right: The correct usage would be: \`${prefix}${commandName} ${command.usage}\` :point_left:`;
         }
-
-        Log.error(msg, commandName);
         return msg.channel.send(reply);
     }
-
-    /*if (command.auditLog) {
-        let channels = msg.guild.channels;
-        if (!channels.find(channels => channels.name === 'geico-log')) {
-            if (!msg.guild.available) 
-                return msg.guild.owner.send("Hello! \nSomeone in your guild used a command which requires the `geico-log` channel, which doesn't exists yet.\nI would have created it for you, but the guild is not available right now :shrug:");
-
-                msg.guild.createChannel('geico-log', {
-                    type: 'text',
-                    permissionOverwrites: [{
-                        id: msg.guild.id,
-                        deny: ['SEND_MESSAGES', 'MANAGE_MESSAGES']
-                    }]
-                }).catch(console.error);
-
-                Log.misc(`#geico-log channel created in guild ${msg.guild.id}`);
-        }
-    }*/
 
     if (!cooldowns.has(command.name)) {
         cooldowns.set(command.name, new Discord.Collection());
@@ -115,7 +95,6 @@ client.on('message', msg => {
         
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
-            Log.misc(`${msg.author.tag} reached cooldown for ${commandName} command at ${msg.createdAt}`);
             return msg.channel.send(`:stopwatch: You're doing that too quickly ${msg.author.tag}!\nYou have to wait another ${timeLeft} second(s) before you can do that again!`);
         }
     }
@@ -123,9 +102,8 @@ client.on('message', msg => {
 	try {
 		command.execute(msg, args);
 	} catch (error) {
-        Log.error(msg, commandName)
 		console.error(error);
-		msg.reply('there was an error trying to execute that command! :interrobang:');
+		msg.reply(' there was an error trying to execute that command! :interrobang:');
 	}
 });
 
