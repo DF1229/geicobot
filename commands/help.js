@@ -20,7 +20,10 @@ module.exports = {
             const name = args[0].toLowerCase();
             const command = commands.get(name);
 
-            if (!command) return msg.channel.send(`:x: I couldn't find that command, ${msg.author}!`);
+            if (!command) {
+                msg.channel.send(`:x: I couldn't find that command, ${msg.author}!`);
+                return Logger.log(msg.author.tag, `requested a help embed, but provided an unknown command: ${command}.`);
+            }
             embed.setTitle(name)
             embed.setDescription(command.description);
             
@@ -42,7 +45,8 @@ module.exports = {
                 }
             });
         } else {
-            return msg.channel.send(`:x: You provided too many arguments, ${msg.author}!`);
+            msg.channel.send(`:x: You provided too many arguments, ${msg.author}!`);
+            return Logger.log(msg.author.tag, `requested a help embed, but provided too many arguments.`);
         }
 
         return msg.channel.send(embed)
