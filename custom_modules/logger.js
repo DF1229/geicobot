@@ -11,5 +11,5 @@ var log = function(authorTag, description) {
     var nextEntry = `${date.getTime()} - ${authorTag} ${description} \n`;
 
     fs.appendFile(`../logs/${year}-${month}-${day} - log.txt`, nextEntry, 'utf8', (err) => {
-    }
+    });
 }
