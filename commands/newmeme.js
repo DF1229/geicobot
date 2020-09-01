@@ -1,3 +1,4 @@
+const Logger = require('../custom_modules/logger.js');
 const Discord = require('discord.js');
 const fs = require('fs');
 
@@ -17,11 +18,15 @@ module.exports = {
 
         fs.readFile('./commands/memepool.json', (err, rawdata) => {
             if (err) {
-                msg.channel.send(`:x: Something went wrong reading the memepool, ${msg.author} :face_palm:`); // with comma
-                throw new Error(err);
+                msg.channel.send(`:x: Something went wrong reading the memepool, please try again later ${msg.author}`);
+                console.error(err);
+                return Logger.log(msg.author.tag, `tried adding to the memepool, but the file could not be read.`)
             }
 
-            if (!rawdata) return msg.channel.send(`:x: Something went wrong reading the memepool ${msg.author} :face_palm:`); // without comma
+            if (!rawdata) {
+                msg.channel.send(`:x: Something went wrong reading the memepool, ${msg.author} :face_palm:`);
+                return Logger.log(msg.author.tag, `tried adding to the memepool, but the rawdata was empty.`);
+            }
             const memepool = JSON.parse(rawdata);
             const newPos = memepool.urls.length;
 
@@ -34,10 +39,14 @@ module.exports = {
             const newMemepool = JSON.stringify(memepool)
 
             fs.writeFile('./commands/memepool.json', newMemepool, err => {
-                if (err) return msg.channel.send(`:x: Something went wrong saving the memepool ${msg.author} :face_palm:`);
+                if (err) {
+                    msg.channel.send(`:x: Something went wrong trying to save the memepool ${msg.author} :face_palm:`);
+                    return Logger.log(msg.author.tag, `tried adding to the memepool, but the file could not be saved.`);
+                }
             });
 
             msg.channel.send(`:white_check_mark: Successfully saved into the memepool with ID: ${newPos}`);
+            return Logger.log(msg.author.tag, `succesfully added to the memepool, id: ${newPos}`);
         });
     }
 }
