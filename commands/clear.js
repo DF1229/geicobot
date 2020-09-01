@@ -1,5 +1,5 @@
 const auditLogger = require('../custom_modules/auditLogEmbed.js');
-const Log = require('../custom_modules/consoleLog.js');
+const Logger = require('../custom_modules/logger.js');
 
 module.exports = {
     works: true,
@@ -12,18 +12,29 @@ module.exports = {
     guildOnly: true,
     adminOnly: false,
     execute(msg, args) {
-        if (!msg.guild.available) {Log.error(msg, 'Clear'); return msg.channel.send(`:x: Something went wrong on Discord's side...\nTry again later ${msg.author}!`);}
-        if (!msg.member.hasPermission('MANAGE_MESSAGES')) {Log.misc(`${msg.author.tag} did not have permission to clear ${args[0]} messages`); return msg.channel.send(`:no_entry: You don't have the required permission(s) to use this command ${msg.author}!`);}
-        if (isNaN(args[0])) {Log.misc(`${msg.author.tag} provided NaN to bulk delete messages`); return msg.channel.send(`:x: That doesn't seem to be a valid number ${msg.author}`);}
-        if (args[0] < 1 || args[0] > 99) {Log.misc(`${msg.author.tag} provided invalid arguments`); return msg.channel.send(`:x: That doesn't seem to be a valid input, note that you can only delete up to 99 messages at a time ${msg.author}`);}
-        
+        if (!msg.guild.available) {
+            Logger.log(msg.author.tag, `tried to clear ${args[0]} messages from channel ${msg.channel.name} (id: ${msg.channel.id}), but something went wrong on Discord's side.`));
+            return msg.channel.send(`:x: Something went wrong on Discord's side...\nTry again later ${msg.author}!`);
+        }
+        if (!msg.member.hasPermission('MANAGE_MESSAGES')) {
+            Logger.log(msg.author.tag, `did not have permission to clear ${args[0]} messages`);
+            return msg.channel.send(`:no_entry: You don't have the required permission(s) to use this command ${msg.author}!`);
+        }
+        if (isNaN(args[0])) {
+            Logger.log(msg.author.tag, `didn't provide a number when trying to clear messages from ${msg.channel.name} (id: ${msg.channel.id}).`);
+            return msg.channel.send(`:x: That doesn't seem to be a valid number ${msg.author}`);
+        }
+        if (args[0] < 1 || args[0] > 99) {
+            Logger.log(msg.author.tag, `provided a number that was too low or too high when trying to clear messages from ${msg.channel.name} (id: ${msg.channel.id}).`);
+            return msg.channel.send(`:x: That doesn't seem to be a valid input, note that you can only delete up to 99 messages at a time ${msg.author}`);
+        }
+
         msg.channel.bulkDelete(args[0], true).catch(err => {
             console.error(err);
-            return msg.channel.send(`:x: There was an error trying to clear the message from the channel :shrug:`);
+            msg.channel.send(`:x: There was an error trying to clear the message from the channel :shrug:`);
+            return Logger.log(msg.author.tag, `tried to clear ${args[0]} messages from channel ${msg.channel.name} (id: ${msg.channel.id}), but an unknown error occured.`);
         });
-        
-        auditLogger.generalLog(msg, 'bulkDelete', `${args[0]} messages removed`);
-        Log.action(msg, this.name);
 
+        Logger.log(msg.author.tag, `cleared ${args[0]} messages from channel ${msg.channel.name} (id: ${msg.channel.id}).`);
     }
 }
