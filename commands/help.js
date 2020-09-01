@@ -1,4 +1,4 @@
-const Logger = require('/custom_modules/Logger.js');
+const Logger = require('../custom_modules/Logger.js');
 const { prefix } = require('../config.json');
 const Discord = require('discord.js');
 
@@ -46,7 +46,7 @@ module.exports = {
         }
 
         return msg.channel.send(embed)
-            .then(Logger.add(msg.author.tag, ' used help command\n'))
+            .then(Logger.log(msg.author.tag, 'used help command.'))
             .catch(console.error);
         
         // OLD HELP.JS UPDATED TO USE v12 EMBEDS ON 28-8-2020
