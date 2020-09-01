@@ -1,3 +1,5 @@
+var Logger = require('../custom_modules/logger.js');
+
 module.exports = {
     works: true,
     name: 'geico',
@@ -7,6 +9,7 @@ module.exports = {
     guildOnly: false,
     adminOnly: false,
     execute(msg, args) {
-        return msg.channel.send(`${msg.author} https://geico.com`);
+        msg.channel.send(`${msg.author} https://geico.com`);
+        return Logger.log(msg.author.tag, `GEICO'D`);
     }
 }
