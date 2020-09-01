@@ -4,7 +4,7 @@
   "description": "A bot for all your insurance needs!",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "discord.js": "^12.3.1"
   },
   "devDependencies": {},
   "scripts": {
