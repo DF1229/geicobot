@@ -12,7 +12,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 
-const Logger = require('./custom_modules/logger.js');
+const Logger = require('custom_modules/logger.js');
 const { config } = require('process');
 
 const client = new Discord.Client();
@@ -55,6 +55,10 @@ client.on('message', msg => {
     */
    
     const command = client.commands.get(commandName);
+
+    if (!command.works) {
+        return msg.channel.send(`:x: Sorry, that command isn't available right now, ${msg.author}!`);
+    }
 
     if (command.adminOnly) {
         if (msg.user.id != config.adminIDs[0]) return msg.channel.send(`:x: Sorry, that command can currently only be used by the developer!`);

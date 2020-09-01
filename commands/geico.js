@@ -1,4 +1,5 @@
 module.exports = {
+    works: true,
     name: 'geico',
     description: 'GEICO!!!',
     args: false,

@@ -1,14 +1,56 @@
+const Logger = require('/custom_modules/Logger.js');
 const { prefix } = require('../config.json');
-const Log = require('../custom_modules/consoleLog.js');
+const Discord = require('discord.js');
 
 module.exports = {
+    works: true,
     name: 'help',
-    description: 'Get a list of all the available commands, or info about a specific command.',
+    description: 'List all available commands, or get info on a specific command.',
     usage: '[command]',
     guildOnly: false,
     adminOnly: false,
     execute (msg, args) {
-        const data = [];
+        const { commands } = msg.client;
+        let embed = new Discord.MessageEmbed()
+                .setColor('GOLD')
+                .setTimestamp()
+                .setFooter(msg.client.user.tag, msg.client.user.avatarURL);
+        
+        if (args.length == 1) {
+            const name = args[0].toLowerCase();
+            const command = commands.get(name);
+
+            if (!command) return msg.channel.send(`:x: I couldn't find that command, ${msg.author}!`);
+            embed.setTitle(name)
+            embed.setDescription(command.description);
+            
+                if (command.usage) embed.addField('Usage', `${prefix}${name} ${command.usage}`, true);
+                if (command.guildOnly) embed.addField('Guild-only', command.guildOnly, true);
+                if (command.adminOnly) embed.addField('Dev-only', command.adminOnly, true);
+        } else if (args.length == 0) {
+            embed.title = "Available commands";
+
+            commands.tap(command => {
+                const name = command.name;
+                const description = command.description;
+
+                if (command.usage) {
+                    const usage = `${prefix}${name} ${command.usage}`;
+                    embed.addField(name, usage, true);
+                } else {
+                    embed.addField(name, description, true);
+                }
+            });
+        } else {
+            return msg.channel.send(`:x: You provided too many arguments, ${msg.author}!`);
+        }
+
+        return msg.channel.send(embed)
+            .then(Logger.add(msg.author.tag, ' used help command\n'))
+            .catch(console.error);
+        
+        // OLD HELP.JS UPDATED TO USE v12 EMBEDS ON 28-8-2020
+        /* const data = [];
         const { commands } = msg.client;
 
         if (!args.length) {
@@ -45,6 +87,6 @@ module.exports = {
 
         msg.channel.send(data, { split: true }).then().catch(err => {
             console.error(err);
-        });
+        });*/
     },
 };

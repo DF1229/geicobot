@@ -2,6 +2,7 @@ const auditLogger = require('../custom_modules/auditLogEmbed.js');
 const Log = require('../custom_modules/consoleLog.js');
 
 module.exports = {
+    works: true,
     name: 'ban',
     description: 'Bans a user from the server',
     usage: '(user)',

@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
+    works: true,
     name: 'meme',
     description: 'Sends a random meme from the pool',
     args: false,

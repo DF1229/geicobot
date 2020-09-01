@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 
 module.exports = {
-    works: 'no',
+    works: false,
     name: 'flirt',
     description: '<o/',
     args: false,
@@ -10,7 +10,7 @@ module.exports = {
     guildOnly: false,
     adminOnly: false,
     execute(msg, args) {
-        if (!msg.guild.available) return; // no point in sending messages, guild not available -> service outage
+        if (!msg.guild.available) return; // no point in sending messages, guild not available == service outage
         
         fs.readFile('./commands/icebreakers.json', (err, rawData) => {
             if (err) return msg.channel.send(`:x: Something went wrong loading \`icebreakers.json\`, ${msg.author}! :face_palm:`);

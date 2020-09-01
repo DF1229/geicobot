@@ -2,6 +2,7 @@ const auditLogger = require('../custom_modules/auditLogEmbed.js');
 const Log = require('../custom_modules/consoleLog.js');
 
 module.exports = {
+    works: true,
     name: 'clear',
     description: 'Clear up to 99 messages from the current channel',
     args: true,

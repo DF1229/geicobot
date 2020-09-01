@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports = {
+    works: true,
     name: 'mute',
     description: 'Mutes a person',
     args: true,
