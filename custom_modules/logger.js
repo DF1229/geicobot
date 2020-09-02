@@ -1,16 +1,12 @@
 const fs = require('fs');
-module.exports = log;
-
-
-var log = function(authorTag, description) {
+module.exports = function log(authorTag, description) {
     const date = new Date();
-    const day = date.day;
-    const month = date.month + 1; // defaults to 0 for january, so +1 for easy reading
-    const year = date.year;
+    const UTCstring = date.toISOString().substr(0, 10) // creates ISO (YYYY-MM-DDTHH:MM:SS.xxxZ) string, and removes the time
+    const timeString = date.toISOString().substr(11, 8);
 
-    var nextEntry = `${date.getTime()} - ${authorTag} ${description} \n`;
+    var nextEntry = `${timeString} - ${authorTag} ${description} \n`;
 
-    fs.appendFile(`../logs/${year}-${month}-${day} - log.txt`, nextEntry, 'utf8', (err) => {
+    fs.appendFile(`./logs/${UTCstring}.txt`, nextEntry, 'utf8', (err) => {
         if (err) throw new Error(err);
     });
     console.log(nextEntry);
