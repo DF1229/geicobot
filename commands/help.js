@@ -14,7 +14,7 @@ module.exports = {
         let embed = new Discord.MessageEmbed()
                 .setColor('GOLD')
                 .setTimestamp()
-                .setFooter(msg.client.user.tag, msg.client.user.avatarURL);
+                .setFooter(msg.client.user.tag, msg.client.user.avatarURL([{'dynamic': true}]));
         
         if (args.length == 1) {
             const name = args[0].toLowerCase();
