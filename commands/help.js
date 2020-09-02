@@ -33,7 +33,7 @@ module.exports = {
         } else if (args.length == 0) {
             embed.title = "Available commands";
 
-            commands.tap(command => {
+            commands.each(command => {
                 const name = command.name;
                 const description = command.description;
 
