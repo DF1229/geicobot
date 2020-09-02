@@ -21,6 +21,25 @@ const sequelize = new Sequelize('geicobase', 'admin', 'password', {
     logging: false,
     storage: 'database.sqlite' // SQLite only
 });
+const Servers = sequelize.define('servers', {
+    guildID: {
+        type: Sequelize.DOUBLE,
+        unique: true
+    },
+    memberCount: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    prefix: {
+        type: Sequelize.STRING,
+        defaultValue: '>',
+        allowNull: false
+    },
+    economyEnabled: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    }
+});
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
