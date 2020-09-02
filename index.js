@@ -2,18 +2,17 @@
  *  Language: JavaScript (running with Node.JS)
  *  Library: Discord.js (https://discord.js.org)
  *  
- *  Version: 0.1.0
+ *  Version: 0.2-beta
  *  Author: Daan Faber (Discord: DF1229#1337)
- *  Date: 28/08/2020
- *  Liscence: ISC
+ *  Date: 02-09-2020
+ *  Liscence: MIT
  */
 
-const fs = require('fs');
-const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
-
 const Logger = require('./custom_modules/logger.js');
+const { prefix, token } = require('./config.json');
+const Discord = require('discord.js');
 const { config } = require('process');
+const fs = require('fs');
 
 const client = new Discord.Client();
 
