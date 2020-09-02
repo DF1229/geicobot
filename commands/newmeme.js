@@ -20,12 +20,12 @@ module.exports = {
             if (err) {
                 msg.channel.send(`:x: Something went wrong reading the memepool, please try again later ${msg.author}`);
                 console.error(err);
-                return Logger.log(msg.author.tag, `tried adding to the memepool, but the file could not be read.`)
+                return Logger(msg.author.tag, `tried adding to the memepool, but the file could not be read.`)
             }
 
             if (!rawdata) {
                 msg.channel.send(`:x: Something went wrong reading the memepool, ${msg.author} :face_palm:`);
-                return Logger.log(msg.author.tag, `tried adding to the memepool, but the rawdata was empty.`);
+                return Logger(msg.author.tag, `tried adding to the memepool, but the rawdata was empty.`);
             }
             const memepool = JSON.parse(rawdata);
             const newPos = memepool.urls.length;
@@ -41,12 +41,12 @@ module.exports = {
             fs.writeFile('./commands/memepool.json', newMemepool, err => {
                 if (err) {
                     msg.channel.send(`:x: Something went wrong trying to save the memepool ${msg.author} :face_palm:`);
-                    return Logger.log(msg.author.tag, `tried adding to the memepool, but the file could not be saved.`);
+                    return Logger(msg.author.tag, `tried adding to the memepool, but the file could not be saved.`);
                 }
             });
 
             msg.channel.send(`:white_check_mark: Successfully saved into the memepool with ID: ${newPos}`);
-            return Logger.log(msg.author.tag, `succesfully added to the memepool, id: ${newPos}`);
+            return Logger(msg.author.tag, `succesfully added to the memepool, id: ${newPos}`);
         });
     }
 }

@@ -16,10 +16,10 @@ module.exports = {
             if (err) {
                 msg.channel.send(`:x: An error occured trying to read the file, ${msg.author}.`);
                 console.error(err);
-                return Logger.log(msg.author.tag, `requested a meme, but an error occured while trying to read memepool.json`);
+                return Logger(msg.author.tag, `requested a meme, but an error occured while trying to read memepool.json`);
             } else if (!rawdata) {
                 msg.channel.send(`:x: I successfully read the file, but the data was not delivered to me as expected... whoopsie!`);
-                return Logger.log(msg.author.tag, `requested a meme, but the rawdata variable was empty.`);
+                return Logger(msg.author.tag, `requested a meme, but the rawdata variable was empty.`);
             }
 
             const memepool = JSON.parse(rawdata);
@@ -35,7 +35,7 @@ module.exports = {
                 .setFooter(`Added by ${author} - ID: ${JSON.stringify(id)}`);
                 
             msg.channel.send(embed);
-            Logger.log(msg.author.tag, `meme succesfully delivered.`);
+            Logger(msg.author.tag, `meme succesfully delivered.`);
         });
 
 

@@ -19,6 +19,6 @@ module.exports = {
         embed.addField('Ping to bot', `${m.createdTimestamp - msg.createdTimestamp}ms`, true);
         embed.addField('API Heartbeat', `${Math.round(msg.client.ping)}ms`, true);
         m.edit(embed);
-        Logger.log(msg.author.tag, `pinged the bot.`);
+        Logger(msg.author.tag, `pinged the bot.`);
 	},
 };

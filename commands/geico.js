@@ -10,6 +10,6 @@ module.exports = {
     adminOnly: false,
     execute(msg, args) {
         msg.channel.send(`${msg.author} https://geico.com`);
-        return Logger.log(msg.author.tag, `GEICO'D`);
+        return Logger(msg.author.tag, `GEICO'D`);
     }
 }

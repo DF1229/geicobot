@@ -36,7 +36,7 @@ client.once('ready', () => {
 client.on('message', msg => {
     if (msg.channel.type === 'text' && msg.channel.name === 'geico-log' && !msg.author.bot) {
         msg.delete().catch(console.error);
-        Logger.log(`${msg.author.tag}'s message removed from #geico-log at ${msg.createdAt}`);
+        Logger(`${msg.author.tag}'s message removed from #geico-log at ${msg.createdAt}`);
     }
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
@@ -65,7 +65,7 @@ client.on('message', msg => {
     }
 
     if (command.guildOnly && msg.channel.type != 'text') {
-        Logger.log(msg.author.tag, `command wasn't executed because it was in dm's (${msg.createdAt})`);
+        Logger(msg.author.tag, `command wasn't executed because it was in dm's (${msg.createdAt})`);
         return msg.channel.send(`:x: I can't execute that command here!`);
     }
 
@@ -108,7 +108,7 @@ client.on('message', msg => {
 	} catch (error) {
 		console.error(error);
         msg.reply(' there was an error trying to execute that command! :interrobang:');
-        Logger.log(msg.author.id, `Error occurred when trying to execute command.\nError log: ${error}\n`);
+        Logger(msg.author.id, `Error occurred when trying to execute command.\nError log: ${error}\n`);
 	}
 });
 

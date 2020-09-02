@@ -1,4 +1,4 @@
-const Logger = require('../custom_modules/Logger.js');
+const Logger = require('../custom_modules/logger.js');
 const { prefix } = require('../config.json');
 const Discord = require('discord.js');
 
@@ -22,7 +22,7 @@ module.exports = {
 
             if (!command) {
                 msg.channel.send(`:x: I couldn't find that command, ${msg.author}!`);
-                return Logger.log(msg.author.tag, `requested a help embed, but provided an unknown command: ${command}.`);
+                return Logger(msg.author.tag, `requested a help embed, but provided an unknown command: ${command}.`);
             }
             embed.setTitle(name)
             embed.setDescription(command.description);
@@ -46,11 +46,11 @@ module.exports = {
             });
         } else {
             msg.channel.send(`:x: You provided too many arguments, ${msg.author}!`);
-            return Logger.log(msg.author.tag, `requested a help embed, but provided too many arguments.`);
+            return Logger(msg.author.tag, `requested a help embed, but provided too many arguments.`);
         }
 
         return msg.channel.send(embed)
-            .then(Logger.log(msg.author.tag, 'used help command.'))
+            .then(Logger(msg.author.tag, 'used help command.'))
             .catch(console.error);
         
         // OLD HELP.JS UPDATED TO USE v12 EMBEDS ON 28-8-2020
