@@ -26,16 +26,18 @@ module.exports = {
             }
             embed.setTitle(name)
             embed.setDescription(command.description);
-            
-                if (command.usage) embed.addField('Usage', `${prefix}${name} ${command.usage}`, true);
-                if (command.guildOnly) embed.addField('Guild-only', command.guildOnly, true);
-                if (command.adminOnly) embed.addField('Dev-only', command.adminOnly, true);
+
+            if (command.usage) embed.addField('Usage', `${prefix}${name} ${command.usage}`, true);
+            if (command.guildOnly) embed.addField('Guild-only', command.guildOnly, true);
+            if (command.adminOnly) embed.addField('Dev-only', command.adminOnly, true);
         } else if (args.length == 0) {
             embed.title = "Available commands";
 
             commands.each(command => {
                 const name = command.name;
                 const description = command.description;
+
+                if (!command.works) return;
 
                 if (command.usage) {
                     const usage = `${prefix}${name} ${command.usage}`;
