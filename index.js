@@ -65,7 +65,7 @@ client.on('message', msg => {
     }
 
     if (command.guildOnly && msg.channel.type != 'text') {
-        Logger(msg.author.tag, `command wasn't executed because it was in dm's (${msg.createdAt})`);
+        Logger(msg.author.tag, `'s ${command.name} command wasn't executed because it was in DM's.`);
         return msg.channel.send(`:x: I can't execute that command here!`);
     }
 
