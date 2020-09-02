@@ -22,7 +22,7 @@ module.exports = {
 
             if (!command) {
                 msg.channel.send(`:x: I couldn't find that command, ${msg.author}!`);
-                return Logger(msg.author.tag, `requested a help embed, but provided an unknown command: ${command}.`);
+                return Logger(msg.author.tag, `requested a help embed, but provided an unknown command: ${name}.`);
             }
             embed.setTitle(name)
             embed.setDescription(command.description);
