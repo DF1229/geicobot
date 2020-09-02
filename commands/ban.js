@@ -4,7 +4,7 @@ module.exports = {
     works: true,
     name: 'ban',
     description: 'Bans a user from the server',
-    usage: '(user)',
+    usage: '<user>',
     args: true,
     argsNum: 1,
     auditLog: true,
