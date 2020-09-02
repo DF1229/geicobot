@@ -1,19 +1,19 @@
 const Logger = require('../custom_modules/logger.js');
 const Discord = require('discord.js');
 
-module.export = {
+module.exports = {
     works: true,
     name: 'invite',
     description: 'Get an invite link for the bot',
     args: false,
     guildOnly: false,
     adminOnly: false,
-    execute(msg) {
-        const id = msg.client.id;
+    execute (msg) {
+        const id = msg.client.user.id;
         const perms = 8;
 
         let embed = new Discord.MessageEmbed()
-            .setColor('LIGHTGREEN')
+            .setColor('GREEN')
             .setFooter(msg.client.user.tag, msg.client.user.avatarURL([{'dynamic': true}]))
             .setTimestamp()
             .addField('Use this link to invite me to your server!', 
