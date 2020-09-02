@@ -10,12 +10,19 @@
 
 const Logger = require('./custom_modules/logger.js');
 const { prefix, token } = require('./config.json');
+const Sequelize = require('sequelize');
 const Discord = require('discord.js');
 const { config } = require('process');
 const fs = require('fs');
 
-const client = new Discord.Client();
+const sequelize = new Sequelize('geicobase', 'admin', 'password', {
+    host: 'localhost',
+    dialect: 'sqlite',
+    logging: false,
+    storage: 'database.sqlite' // SQLite only
+});
 
+const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
