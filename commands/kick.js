@@ -7,7 +7,6 @@ module.exports = {
     usage: '<user>',
     args: true,
     argsNum: 1,
-    auditLog: true,
     guildOnly: true,
     adminOnly: false,
     execute(msg) {

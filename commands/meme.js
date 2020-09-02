@@ -9,7 +9,6 @@ module.exports = {
     args: false,
     guildOnly: false,
     adminOnly: false,
-    auditLog: false,
     cooldown: 5,
     execute(msg) {
         fs.readFile('./commands/memepool.json', (err, rawdata) => {
