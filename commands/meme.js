@@ -33,9 +33,15 @@ module.exports = {
                 .setColor('#00FF15')
                 .setImage(url)
                 .setFooter(`Added by ${author} - ID: ${JSON.stringify(id)}`);
-                
-            msg.channel.send(embed);
-            Logger(msg.author.tag, `meme succesfully delivered.`);
+            
+            try {
+                msg.channel.send(embed);
+            } catch (err) {
+                if (err) 
+                    throw err;
+                else 
+                    Logger(msg.author.tag, `meme succesfully delivered.`);
+            }
         });
 
 
