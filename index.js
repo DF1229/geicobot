@@ -40,7 +40,7 @@ client.once('ready', () => {
         .catch(err => console.error);
 
     db.authenticate().then(() => {
-        Logger(client.user.tag, 'succesfully authenticated into the SERVERS database');
+        Logger(client.user.tag, 'succesfully authenticated into the database');
         Servers.init(db);
         Servers.sync(/*{'force':true}*/);
     }).catch(err => console.error(err));

@@ -17,7 +17,7 @@ module.exports = {
                     "memberCount": msg.guild.memberCount
                 });
             }
-            Logger(msg.author.tag, 'succesfully registered current server data into the database.');
+            Logger(msg.author.tag, 'succesfully registered server data into the database.');
             msg.channel.send(`Done.`);
         } catch (err) {
             if(err) {
