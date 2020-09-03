@@ -26,7 +26,7 @@ module.exports = class Servers extends Model {
                 allowNull: false
             }
         }, {
-            tableName: 'Servers',
+            tableName: 'Server',
             timestamps: true,
             sequelize
         });

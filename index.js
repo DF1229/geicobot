@@ -16,7 +16,7 @@ const Discord = require('discord.js');
 const { config } = require('process');
 const fs = require('fs');
 
-const sequelize = new Sequelize('geicobase', 'admin', 'password', {
+const db = new Sequelize('geicobase', 'admin', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: true,
