@@ -1,4 +1,4 @@
-/*  Project: Geico Insurance (Martin) Discord bot
+/*  Project: Geico Insurance Discord bot
  *  Language: JavaScript (running with Node.JS)
  *  Library: Discord.js (https://discord.js.org)
  *  
@@ -9,8 +9,9 @@
  */
 
 const Logger = require('./custom_modules/logger.js');
-const { prefix, token } = require('./config.json');
-const Sequelize = require('sequelize');
+const { prefix, token, adminIDs } = require('./config.json');
+const { Sequelize } = require('sequelize');
+const Servers = require('./data/models/servers');
 const Discord = require('discord.js');
 const { config } = require('process');
 const fs = require('fs');
@@ -18,27 +19,8 @@ const fs = require('fs');
 const sequelize = new Sequelize('geicobase', 'admin', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
-    logging: false,
-    storage: 'database.sqlite' // SQLite only
-});
-const Servers = sequelize.define('servers', {
-    guildID: {
-        type: Sequelize.DOUBLE,
-        unique: true
-    },
-    memberCount: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    prefix: {
-        type: Sequelize.STRING,
-        defaultValue: '>',
-        allowNull: false
-    },
-    economyEnabled: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-    }
+    logging: true,
+    storage: './data/database.sqlite' // SQLite only
 });
 
 const client = new Discord.Client();
@@ -47,15 +29,21 @@ const cooldowns = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.name, command);
 }
 
 client.once('ready', () => {
     console.clear();
-    console.log(`-={ ${client.user.tag} logged in and ready with command prefix "${prefix}" }=-`);
-    client.user.setActivity("with my feelings", {type: "PLAYING"})
-        .catch(console.error);
+    Logger(`-={ ${client.user.tag}`, `logged in and ready with command prefix "${prefix}" }=-`);
+    client.user.setActivity("with my feelings", { type: "PLAYING" })
+        .catch(err => console.error);
+
+    db.authenticate().then(() => {
+        Logger(client.user.tag, 'succesfully authenticated into the SERVERS database');
+        Servers.init(db);
+        Servers.sync(/*{'force':true}*/);
+    }).catch(err => console.error(err));
 });
 
 client.on('message', msg => {
@@ -65,12 +53,12 @@ client.on('message', msg => {
     }
 
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-    
+
     const args = msg.content.slice(prefix.length).split(/ +/);
-	const commandName = args.shift().toLowerCase();
+    const commandName = args.shift().toLowerCase();
 
     if (!client.commands.has(commandName)) return;
-    
+
     /*  
     *   If you're familiar with JavaScript, this comment is probably not neccesary for you.
     *   
@@ -78,7 +66,7 @@ client.on('message', msg => {
     *   Because the bot already checked if the command exists, everything past this point only gets run if the command actually exists.
     *   With that reasoning, the next couple of if-statements are meant to check if the user has used the command in the right way.
     */
-   
+
     const command = client.commands.get(commandName);
 
     if (!command.works) {
@@ -86,7 +74,7 @@ client.on('message', msg => {
     }
 
     if (command.adminOnly) {
-        if (msg.user.id != config.adminIDs[0]) return msg.channel.send(`:x: Sorry, that command can currently only be used by the developer!`);
+        if (msg.author.id != adminIDs[0]) return msg.channel.send(`:x: Sorry, that command can currently only be used by the developer!`);
     }
 
     if (command.guildOnly && msg.channel.type != 'text') {
@@ -121,20 +109,20 @@ client.on('message', msg => {
 
     if (timestamps.has(msg.author.id)) {
         const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
-        
+
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
             return msg.channel.send(`:stopwatch: You're doing that too quickly ${msg.author.tag}!\nYou have to wait another ${timeLeft} second(s) before you can do that again!`);
         }
     }
 
-	try {
+    try {
         command.execute(msg, args);
-	} catch (error) {
-		console.error(error);
+    } catch (error) {
+        console.error(error);
         msg.reply(' there was an error trying to execute that command! :interrobang:');
         Logger(msg.author.id, `Error occurred when trying to execute command.\nError log: ${error}\n`);
-	}
+    }
 });
 
 client.login(token);
