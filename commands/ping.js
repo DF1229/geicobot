@@ -13,7 +13,7 @@ module.exports = {
             .setColor('DARK_GOLD')
             .setTimestamp()
             .setTitle('Ping :ping_pong: Pong')
-            .setFooter(msg.client.user.tag, msg.client.user.avatarURL);
+            .setFooter(msg.client.user.tag, msg.client.user.avatarURL([{'dynamic': true}]));
 
         const m = await msg.channel.send('Pinging...');
 
