@@ -38,6 +38,7 @@ module.exports = {
                 const description = command.description;
 
                 if (!command.works) return;
+                if (command.adminOnly) return;
 
                 if (command.usage) {
                     const usage = `${prefix}${name} ${command.usage}`;
