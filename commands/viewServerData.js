@@ -1,7 +1,8 @@
 const Logger = require('../custom_modules/logger');
-const Servers = require('../data/models/servers');
+const Server = require('../data/models/server');
 const Discord = require('discord.js');
 const { execute } = require('./gatherServerData');
+const lLogger = require('../custom_modules/logger');
 
 module.exports = {
     works: true,
@@ -11,22 +12,28 @@ module.exports = {
     guildOnly: false,
     async execute(msg) {
         let embed = new Discord.MessageEmbed()
-        .setColor('DARK_VIVID_PINK')
-        .setFooter(msg.client.user.tag, msg.client.user.avatarURL([{'dynamic': true}]))
-        .setTimestamp();
+            .setColor('DARK_VIVID_PINK')
+            .setFooter(msg.client.user.tag, msg.client.user.avatarURL([{'dynamic': true}]))
+            .setTimestamp();
         
-        const savedGuilds = await Servers.findAll();
-        for (guild in savedGuilds.dataValues) {
+        const guilds = await Server.findAll();
+
+        if (!guilds[0]) {
+            msg.channel.send(`:x: ***Database is empty! Please run \`insertserverdata\` command first! ***`);
+            return Logger(msg.author.tag, 'tried to viewserverdata, but the database was empty.');
+        }
+        
+        guilds.forEach(guild => {
             console.log(guild);
 
-            // embed.setTitle(guild.guildName);
-            // embed.addField('guildID', guild.guildID);
-            // embed.addField('memberCount', guild.memberCount);
-            // embed.addField('prefix', guild.prefix);
-            // embed.addField('economyEnabled', guild.economyEnabled);
+            embed.setTitle(guild.guildName);
+            embed.addField('guildID', guild.guildID, true);
+            embed.addField('memberCount', guild.memberCount, true);
+            embed.addField('prefix', guild.prefix, true);
+            embed.addField('economyEnabled', guild.economyEnabled, true);
 
             msg.channel.send(embed).catch(err => console.error(err));
-            Logger(msg.author.tag, "viewed server data.");
-        }
+        });
+        Logger(msg.author.tag, "viewed server data.");
     }
 }
