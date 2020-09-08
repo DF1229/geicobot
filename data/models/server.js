@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 
-module.exports = class Servers extends Model {
+module.exports = class Server extends Model {
     static init(sequelize) {
         return super.init({
             guildID: {
@@ -26,7 +26,7 @@ module.exports = class Servers extends Model {
                 allowNull: false
             }
         }, {
-            tableName: 'Server',
+            tableName: 'Servers',
             timestamps: true,
             sequelize
         });
