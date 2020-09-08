@@ -2,16 +2,18 @@
  *  Language: JavaScript (running with Node.JS)
  *  Library: Discord.js (https://discord.js.org)
  *  
- *  Version: 0.2-beta
+ *  Version: 0.3-beta
  *  Author: Daan Faber (Discord: DF1229#1337)
- *  Date: 02-09-2020
+ *  Date: 03-09-2020
  *  Liscence: MIT
  */
 
-const Logger = require('./custom_modules/logger.js');
+const f_createServerEntry = require('./data/f_createServerEntry');
+const f_deleteServerEntry = require('./data/f_deleteServerEntry');
 const { prefix, token, adminIDs } = require('./config.json');
+const Logger = require('./custom_modules/logger.js');
 const { Sequelize } = require('sequelize');
-const Servers = require('./data/models/servers');
+const Server = require('./data/models/server');
 const Discord = require('discord.js');
 const { config } = require('process');
 const fs = require('fs');
@@ -41,8 +43,8 @@ client.once('ready', () => {
 
     db.authenticate().then(() => {
         Logger(client.user.tag, 'succesfully authenticated into the database');
-        Servers.init(db);
-        Servers.sync(/*{'force':true}*/);
+        Server.init(db);
+        Server.sync({/*'force':true*/});
     }).catch(err => console.error(err));
 });
 
@@ -123,6 +125,23 @@ client.on('message', msg => {
         msg.reply(' there was an error trying to execute that command! :interrobang:');
         Logger(msg.author.id, `Error occurred when trying to execute command.\nError log: ${error}\n`);
     }
+});
+
+client.on('guildCreate', guild => {
+    Logger(client.user.tag, `joined a new guild: ${guild.name} (id: ${guild.id}).`);
+    
+    if (f_createServerEntry(guild)) {
+        Logger(guild.name, `with id ${guild.id} registered in the database.`);
+    }
+    Logger(guild.name, `with id ${guild.id} could not be added to the database.`);
+});
+client.on('guildDelete', guild => {
+    Logger(client.user.tag, `was removed from a guild: ${guild.name} (id: ${guild.id}).`);
+
+    if (f_deleteServerEntry(guild)) {
+        Logger(guild.name, `with id ${guild.id} could not be removed from the database.`);
+    }
+    Logger(guild.name, `with id ${guild.id} was removed from the database.`);
 });
 
 client.login(token);
