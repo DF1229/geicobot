@@ -1,5 +1,5 @@
 const Logger = require('../custom_modules/logger');
-const Servers = require('../data/models/servers');
+const Server = require('../data/models/server');
 
 module.exports = {
     works: true,
@@ -10,19 +10,19 @@ module.exports = {
         const guilds = msg.client.guilds.cache;
 
         try {
-            for (guild in guilds) {
-                const newDate = await Servers.create({
-                    "guildID": msg.guild.id,
-                    "guildName": msg.guild.name,
-                    "memberCount": msg.guild.memberCount
+            guilds.forEach(async guild => {
+                await Server.create({
+                    "guildID": guild.id,
+                    "guildName": guild.name,
+                    "memberCount": guild.memberCount
                 });
-            }
+            });
             Logger(msg.author.tag, 'succesfully registered server data into the database.');
-            msg.channel.send(`Done.`);
+            msg.channel.send(`Done, ${i} servers registered into database.`);
         } catch (err) {
             if(err) {
                 console.error(err);
-                Logger(msg.author.tag, 'tried to register current server data, but an error occured.');
+                Logger(msg.author.tag, 'tried to register server data, but an error occured.');
                 msg.channel.send(`Error, is \`Servers.sync({'force': true})\` enabled?`);
             }
         }
