@@ -71,20 +71,20 @@ client.on('message', msg => {
 
     const command = client.commands.get(commandName);
 
-    if (!command.works) {
+    if (!command.works) { // check if command is disabled by dev
         return msg.channel.send(`:x: Sorry, that command isn't available right now, ${msg.author}!`);
     }
 
-    if (command.adminOnly) {
+    if (command.adminOnly) { // check if command is bot-admin only
         if (msg.author.id != adminIDs[0]) return msg.channel.send(`:x: Sorry, that command can currently only be used by the developer!`);
     }
 
-    if (command.guildOnly && msg.channel.type != 'text') {
+    if (command.guildOnly && msg.channel.type != 'text') { // check if command is guild-only, and if the command was used in DM's or a guild
         Logger(msg.author.tag, `'s ${command.name} command wasn't executed because it was in DM's.`);
         return msg.channel.send(`:x: I can't execute that command here!`);
     }
 
-    if (command.args && !args.length) {
+    if (command.args && !args.length) { // check if the number of arguments passed matches the amount expected, execute command if so
         let reply = `:x: You didn't provide any arguments, ${msg.author}! :x:`;
 
         if (command.usage) {
@@ -92,7 +92,7 @@ client.on('message', msg => {
         }
 
         return msg.channel.send(reply);
-    } else if (command.args && args.length > command.argsNum) {
+    } else if (command.args && args.length > command.argsNum) { // 
         let reply = `:x: You provided too many arguments, ${msg.author}! :x:`;
 
         if (command.usage) {
@@ -119,6 +119,7 @@ client.on('message', msg => {
     }
 
     try {
+        console.log('try exec');
         command.execute(msg, args);
     } catch (error) {
         console.error(error);

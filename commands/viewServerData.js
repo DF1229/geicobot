@@ -1,8 +1,6 @@
 const Logger = require('../custom_modules/logger');
 const Server = require('../data/models/server');
 const Discord = require('discord.js');
-const { execute } = require('./gatherServerData');
-const lLogger = require('../custom_modules/logger');
 
 module.exports = {
     works: true,
