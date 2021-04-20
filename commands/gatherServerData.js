@@ -6,7 +6,7 @@ module.exports = {
     name: 'gatherserverdata',
     description: 'test',
     adminOnly: true,
-    guildOnly: false,
+    guildOnly: true,
     args: false,
     execute(msg) {
         const guilds = msg.client.guilds.cache;
